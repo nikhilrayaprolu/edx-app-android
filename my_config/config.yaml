@@ -1,0 +1,5 @@
+API_HOST_URL: 'http://demoschool.ml' # localhost is 10.0.2.2 in Android
+ENVIRONMENT_DISPLAY_NAME: 'DemoSchool'
+PLATFORM_NAME: 'Demo Public School'
+PLATFORM_DESTINATION_NAME: 'demoschool.ml'
+FEEDBACK_EMAIL_ADDRESS: 'support@example.com'

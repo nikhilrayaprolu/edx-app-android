@@ -16,31 +16,34 @@ buildscript {
         mavenCentral()  //  This is the Maven Central repo
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:${GRADLE_PLUGIN_VERSION}"
+        classpath "com.android.tools.build:gradle:3.4.1"
         classpath 'com.google.gms:google-services:4.0.1'
     }
 }
 
 // task that creates 'artifacts' directory
-task createBuildArtifactsDirectory << { task ->
-    def hashPipe = new ByteArrayOutputStream()
-    task.project.exec {
-        commandLine = ['git', 'rev-parse', '--verify', 'HEAD']
-        standardOutput = hashPipe
-    }
+task createBuildArtifactsDirectory { task ->
+    doLast {
+        def hashPipe = new ByteArrayOutputStream()
+        task.project.exec {
+            commandLine = ['git', 'rev-parse', '--verify', 'HEAD']
+            standardOutput = hashPipe
+        }
 
-    def destDir = "artifacts"
-    task.project.exec {
-        commandLine = ['mkdir', '-p', destDir]
+        def destDir = "artifacts"
+        task.project.exec {
+            commandLine = ['mkdir', '-p', destDir]
+        }
     }
 }
-
 // Copies unit test reports to the 'artifacts' directory
-task copyUnitTestBuildArtifacts << { task ->
-    // copy unit test reports
-    def srcPath = "OpenEdXMobile/build/reports"
-    task.project.exec {
-        commandLine = ['cp', '-R', srcPath, 'artifacts']
+task copyUnitTestBuildArtifacts { task ->
+    doLast {
+        // copy unit test reports
+        def srcPath = "OpenEdXMobile/build/reports"
+        task.project.exec {
+            commandLine = ['cp', '-R', srcPath, 'artifacts']
+        }
     }
 }
 copyUnitTestBuildArtifacts.dependsOn createBuildArtifactsDirectory
@@ -55,11 +58,13 @@ task copyLintBuildArtifacts(type: Copy) {
 copyLintBuildArtifacts.dependsOn createBuildArtifactsDirectory
 
 // Copies acceptance test reports to the 'artifacts' directory
-task copyAcceptanceTestBuildArtifacts << { task ->
-    // copy acceptance test reports
-    srcPath = "AcceptanceTests/Test-Reports"
-    task.project.exec {
-        commandLine = ['cp', '-R', srcPath, 'artifacts']
+task copyAcceptanceTestBuildArtifacts { task ->
+    doLast {
+        // copy acceptance test reports
+        srcPath = "AcceptanceTests/Test-Reports"
+        task.project.exec {
+            commandLine = ['cp', '-R', srcPath, 'artifacts']
+        }
     }
 }
 copyAcceptanceTestBuildArtifacts.dependsOn createBuildArtifactsDirectory

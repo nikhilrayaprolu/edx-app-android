@@ -69,7 +69,7 @@ public interface OkHttpClientProvider extends Provider<OkHttpClient> {
                     (usesOfflineCache ? USES_OFFLINE_CACHE : 0);
             OkHttpClient client = clients[index];
             if (client == null) {
-                final OkHttpClient.Builder builder = new OkHttpClient.Builder();
+                final OkHttpClient.Builder builder = new OkHttpClient.Builder().retryOnConnectionFailure(true);
                 List<Interceptor> interceptors = builder.interceptors();
                 if (usesOfflineCache) {
                     final File cacheDirectory = new File(context.getFilesDir(), "http-cache");
