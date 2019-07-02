@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.edx.mobile.R;
 import org.edx.mobile.model.course.CourseComponent;
 import org.edx.mobile.model.course.VideoBlockModel;
+import org.edx.mobile.util.AppConstants;
 import org.edx.mobile.services.ViewPagerDownloadManager;
 
 public class CourseUnitOnlyOnYoutubeFragment extends CourseUnitFragment {
@@ -32,9 +34,26 @@ public class CourseUnitOnlyOnYoutubeFragment extends CourseUnitFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_course_unit_only_on_youtube, container, false);
-        ((TextView) v.findViewById(R.id.only_youtube_available_message)).setText(R.string.assessment_only_on_youtube);
-        v.findViewById(R.id.view_on_youtube_button).setOnClickListener(new View.OnClickListener() {
+        Toast.makeText(this.getContext(), "Hello in onCreateView", Toast.LENGTH_SHORT).show();
+        final View courseUnitOnlyOnYoutube = inflater.inflate(R.layout.fragment_course_unit_only_on_youtube, container, false);
+        if (environment.getConfig().getEmbeddedYoutubeConfig().isYoutubeEnabled()) {
+            ((TextView) courseUnitOnlyOnYoutube.findViewById(R.id.only_youtube_available_message)).setText("Course Only On Youtube");
+            courseUnitOnlyOnYoutube.findViewById(R.id.update_youtube_button).setVisibility(View.VISIBLE);
+            courseUnitOnlyOnYoutube.findViewById(R.id.update_youtube_button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(AppConstants.APP_PLAYSTORE_YOUTUBE_URI));
+                        startActivity(intent);
+                    } catch (android.content.ActivityNotFoundException e) {
+                        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(AppConstants.BROWSER_PLAYSTORE_YOUTUBE_URI));
+                        startActivity(intent);
+                    }
+                }
+            });
+        }
+
+        courseUnitOnlyOnYoutube.findViewById(R.id.view_on_youtube_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Intent.ACTION_VIEW);
@@ -42,7 +61,7 @@ public class CourseUnitOnlyOnYoutubeFragment extends CourseUnitFragment {
                 startActivity(i);
             }
         });
-        return v;
+        return courseUnitOnlyOnYoutube;
     }
 
     @Override

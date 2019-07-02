@@ -2,6 +2,7 @@ package org.edx.mobile.player;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -152,8 +153,12 @@ public class TranscriptManager {
         if (transcript == null) {
             return;
         }
+        Log.d(String.valueOf(transcript),"Value");
+
         for (String value : transcript.values()) {
+//            value = null;
             if (value != null) {
+
                 startTranscriptDownload(value);
             }
         }

@@ -371,6 +371,10 @@ public class CourseOutlineAdapter extends BaseAdapter {
             if (null != videoData) {
                 updateUIForVideo(viewHolder, videoData, videoBlockModel);
                 return;
+            }else if (videoBlockModel.getData().encodedVideos.youtube != null && config.getEmbeddedYoutubeConfig().isYoutubeEnabled()) {
+                viewHolder.rowType.setIcon(FontAwesomeIcons.fa_youtube_play);
+                viewHolder.rowType.setIconColorResource(R.color.edx_brand_primary_base);
+                return;
             }
         }
         if (config.isDiscussionsEnabled() && row.component instanceof DiscussionBlockModel) {

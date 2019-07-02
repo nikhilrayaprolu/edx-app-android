@@ -4,6 +4,8 @@ package org.edx.mobile.view.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
+import android.widget.Toast;
 
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
 import org.edx.mobile.model.course.BlockType;
@@ -12,13 +14,16 @@ import org.edx.mobile.model.course.DiscussionBlockModel;
 import org.edx.mobile.model.course.HtmlBlockModel;
 import org.edx.mobile.model.course.VideoBlockModel;
 import org.edx.mobile.util.Config;
+import org.edx.mobile.util.VideoUtil;
+import org.edx.mobile.view.CourseBaseActivity;
+import org.edx.mobile.view.CourseUnitAndroidVideoPlayerFragment;
 import org.edx.mobile.view.CourseUnitDiscussionFragment;
 import org.edx.mobile.view.CourseUnitEmptyFragment;
 import org.edx.mobile.view.CourseUnitFragment;
 import org.edx.mobile.view.CourseUnitMobileNotSupportedFragment;
 import org.edx.mobile.view.CourseUnitOnlyOnYoutubeFragment;
-import org.edx.mobile.view.CourseUnitVideoFragment;
 import org.edx.mobile.view.CourseUnitWebViewFragment;
+import org.edx.mobile.view.CourseUnitYoutubeVideoFragment;
 
 import java.util.List;
 
@@ -73,11 +78,19 @@ public class CourseUnitPagerAdapter extends FragmentStatePagerAdapter {
         }
 
         CourseUnitFragment unitFragment;
+        final boolean isYoutubeVideo = (minifiedUnit instanceof VideoBlockModel && ((VideoBlockModel) minifiedUnit).getData().encodedVideos.getYoutubeVideoInfo() != null);
+//        Toast.makeText(, "", Toast.LENGTH_SHORT).show();
+        Log.d(String.valueOf(isYoutubeVideo), "getItem: Hello");
         //FIXME - for the video, let's ignore studentViewMultiDevice for now
         if (isCourseUnitVideo(minifiedUnit)) {
-            unitFragment = CourseUnitVideoFragment.newInstance((VideoBlockModel) minifiedUnit, (pos < unitList.size()), (pos > 0));
-        } else if (minifiedUnit instanceof VideoBlockModel && ((VideoBlockModel) minifiedUnit).getData().encodedVideos.getYoutubeVideoInfo() != null) {
-            unitFragment = CourseUnitOnlyOnYoutubeFragment.newInstance(minifiedUnit);
+            unitFragment = CourseUnitAndroidVideoPlayerFragment.newInstance((VideoBlockModel) minifiedUnit, (pos < unitList.size()), (pos > 0));
+        } else if (isYoutubeVideo && config.getEmbeddedYoutubeConfig().isYoutubeEnabled() && VideoUtil.isAPIYoutubeSupported(((CourseBaseActivity) callback).getApplicationContext())) {
+            unitFragment = CourseUnitYoutubeVideoFragment.newInstance((VideoBlockModel) minifiedUnit, (pos < unitList.size()), (pos > 0));
+        } else if (isYoutubeVideo) {
+            Log.d(String.valueOf(config.getEmbeddedYoutubeConfig().isYoutubeEnabled()),"config");
+            Log.d(String.valueOf(VideoUtil.isAPIYoutubeSupported(((CourseBaseActivity) callback).getApplicationContext())),"api support");
+//            Toast.makeText(, "", Toast.LENGTH_SHORT).show();
+            unitFragment = CourseUnitYoutubeVideoFragment.newInstance((VideoBlockModel) minifiedUnit, (pos < unitList.size()), (pos > 0));
         } else if (config.isDiscussionsEnabled() && minifiedUnit instanceof DiscussionBlockModel) {
             unitFragment = CourseUnitDiscussionFragment.newInstance(minifiedUnit, courseData);
         } else if (!minifiedUnit.isMultiDevice()) {

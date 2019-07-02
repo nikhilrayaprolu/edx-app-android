@@ -37,5 +37,16 @@
         android:layout_marginBottom="@dimen/edx_margin"
         android:text="@string/assessment_open_on_youtube" />
 
+    <Button
+        android:id="@+id/update_youtube_button"
+        style="@style/edX.Widget.RegularButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:text="Assesment Update youtube"
+        android:visibility="gone"
+
+        />
+
 </LinearLayout>
 

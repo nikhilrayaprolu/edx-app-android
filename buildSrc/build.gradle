@@ -25,6 +25,8 @@ subprojects {
         compile 'org.codehaus.groovy:groovy-all:2.4.12'
         compile gradleApi()
         compile 'org.yaml:snakeyaml:1.14'
+//        compile 'com.google.apis:google-api-services-youtube:v3-rev181-1.22.0'
+//        compile files('libs/libs/YoutubeAndroidPlayerApi.jar')
     }
 }
 

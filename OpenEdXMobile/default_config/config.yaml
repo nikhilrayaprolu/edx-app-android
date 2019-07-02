@@ -1,5 +1,8 @@
-API_HOST_URL: 'http://10.0.2.2:8000' # localhost is 10.0.2.2 in Android
+API_HOST_URL: 'http://www.demoschool.ml/' # localhost is 10.0.2.2 in Android
 ENVIRONMENT_DISPLAY_NAME: 'Localhost'
 PLATFORM_NAME: 'Your platform name here'
 PLATFORM_DESTINATION_NAME: 'example.com'
 FEEDBACK_EMAIL_ADDRESS: 'support@example.com'
+YOUTUBE_VIDEO:
+  ENABLED: True
+  YOUTUBE_API_KEY: 'AIzaSyBjEMI8afKKEWq63nqqTZk5Nfl5ZK360yA'

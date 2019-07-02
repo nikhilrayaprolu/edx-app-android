@@ -20,6 +20,7 @@ public class UserAgentInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         return chain.proceed(chain.request().newBuilder()
                 .header("User-Agent", userAgent)
+                .header("Connection", "close")
                 .build());
     }
 }
